@@ -1,0 +1,31 @@
+name: Build and deploy prod app to codered
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    env:
+      CR_TOKEN: ${{ secrets.CR_TOKEN }}
+      CR_ENV: staging
+      CR_APP: djangonautspacetest
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20.10.0
+        cache: 'npm'
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip' # caching pip dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements/requirements.txt
+    - run: python manage.py tailwind install
+    - run: python manage.py tailwind build
+    - run: cr deploy ${{ env.CR_APP}} --env ${{ env.CR_ENV }}

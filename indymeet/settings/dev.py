@@ -5,13 +5,6 @@ from __future__ import annotations
 
 from .base import *  # noqa F403 F401
 
-print("----------------------------------")
-print("----------------------------------")
-print("DEV")
-print("----------------------------------")
-print("----------------------------------")
-
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -23,16 +16,14 @@ ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-INSTALLED_APPS += ["django_extensions"]  # noqa F405
-
-try:
-    from .local import *  # noqa F403 F401
-except ImportError:
-    pass
-
 BASE_URL = "http://localhost:8000"
 
 RECAPTCHA_PUBLIC_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
 RECAPTCHA_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
 
 SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"]
+
+try:
+    from .local import *  # noqa F403 F401
+except ImportError:
+    pass

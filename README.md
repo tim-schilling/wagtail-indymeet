@@ -102,7 +102,7 @@ This section should list any major frameworks/libraries used to bootstrap your p
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* Python version 3.10.5
+* Python version 3.11
 
 ### Installation
 
@@ -203,12 +203,12 @@ Don't forget to give the project a star! Thanks again!
 Merging to `main` branch deploys to [https://djangonaut.space](https://djangonaut.space). Merging `feature/AmazingFeature` to `develop` deploys to [https://staging-djangonaut-space.azurewebsites.net/](https://staging-djangonaut-space.azurewebsites.net/)
 
 **Running production or staging locally**
-- Set .env variables `USER`, `PASSWORD` and `HOST` for either `staging` or `production` in order to access staging db. Credentials are in the password manager
-- `python manage.py runserver --settings=indymeet.settings.production`
+- Set .env variables `DB_NAME`, `DB_USER`, `DB_PASSWORD` and `DB_HOST` for either `staging` or `production` in order to access staging db. Credentials are in the password manager
+- `python manage.py runserver --settings=indymeet.settings.prod`
 
 **Migrate production or staging db**
-- Set terminal variables for `USER`, `PASSWORD` and `HOST` for either `staging` or `production` db. Credentials are in the password manager.
-- `python manage.py migrate --settings=indymeet.settings.production`
+- Set terminal variables for `DB_NAME`, `DB_USER`, `DB_PASSWORD` and `DB_HOST` for either `staging` or `production` db. Credentials are in the password manager.
+- `python manage.py migrate --settings=indymeet.settings.prod`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

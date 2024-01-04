@@ -21,7 +21,7 @@ node_modules
 
 # production
 build
-theme/static/css/dist/style.css
+theme/static/css/dist/
 
 # misc
 .DS_Store

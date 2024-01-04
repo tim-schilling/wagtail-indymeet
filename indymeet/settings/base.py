@@ -13,14 +13,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE_DIR = os.path.dirname(PROJECT_DIR)
-
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -32,6 +31,7 @@ INSTALLED_APPS = [
     "search",
     "anymail",
     "captcha",
+    "django_extensions",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.contrib.table_block",
@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # azure storage
     "storages",
     # other
     "debug_toolbar",
@@ -78,12 +77,8 @@ MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
-AZURE_IP = os.environ.get("AZURE_IP", False)
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-    AZURE_IP,
-]
+INTERNAL_IPS = ["127.0.0.1"]
 
 ROOT_URLCONF = "indymeet.urls"
 
@@ -91,7 +86,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(PROJECT_DIR, "templates"),
+            os.path.join(BASE_DIR, "indymeet", "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -107,20 +102,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "indymeet.wsgi.application"
 
-SECRET_KEY = os.environ["SECRET_KEY"]
+SECRET_KEY = os.environ["RANDOM_SECRET_KEY"]
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "djangonaut-space",
-        "USER": os.environ.get("USER"),
-        "PASSWORD": os.environ.get("PASSWORD"),
-        "HOST": os.environ.get("HOST"),
-        "PORT": 5432,
-        "OPTIONS": {},
-    },
+        "HOST": os.environ["DB_HOST"],
+        "NAME": os.environ["DB_NAME"],
+        "USER": os.environ["DB_USER"],
+        "PASSWORD": os.environ["DB_PASSWORD"],
+        "OPTIONS": {
+            "client_encoding": "UTF8",
+            "sslmode": "require",
+        },
+    }
 }
 
 
@@ -141,7 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -163,12 +160,16 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
-
 STATICFILES_DIRS = [
-    os.path.join(PROJECT_DIR, "static"),
-    os.path.join(BASE_DIR, "theme", "static"),
+    os.path.join(BASE_DIR, "indymeet", "static"),
     os.path.join(BASE_DIR, "theme", "static_src"),
 ]
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 
 # ManifestStaticFilesStorage is recommended in production, to prevent outdated
 # JavaScript / CSS assets being served from cache (e.g. after a Wagtail upgrade).
@@ -181,13 +182,6 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATIC_URL = "/static/"
-
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-MEDIA_URL = "/media/"
-
 
 # Wagtail settings
 
@@ -203,7 +197,8 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = "http://example.com"
+
+WAGTAILADMIN_BASE_URL = f"http://{os.environ.get('VIRTUAL_HOST', 'example.com')}"
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
