@@ -11,6 +11,13 @@ jobs:
       CR_TOKEN: ${{ secrets.CR_TOKEN }}
       CR_ENV: staging
       CR_APP: djangonautspacetest
+      # Specify dummy environment variables to avoid hard breaks.
+      RANDOM_SECRET_KEY: "hunter2"
+      VIRTUAL_HOST: "djangonaut.space"
+      DB_HOST: ""
+      DB_USER: ""
+      DB_NAME: ""
+      DB_PASSWORD: ""
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -18,6 +25,7 @@ jobs:
       with:
         node-version: 20.10.0
         cache: 'npm'
+        cache-dependency-path: theme/static_src/package-lock.json
     - uses: actions/setup-python@v5
       with:
         python-version: '3.11'
