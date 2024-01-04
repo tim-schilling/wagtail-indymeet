@@ -35,4 +35,4 @@ jobs:
         pip install -r requirements/requirements.txt
     - run: python manage.py tailwind install
     - run: python manage.py tailwind build
-    - run: cr deploy ${{ env.CR_APP}} --token ${{ env.CR_TOKEN }} --debug
+    - run: cr deploy ${{ env.CR_APP}} --token ${{ env.CR_TOKEN }}

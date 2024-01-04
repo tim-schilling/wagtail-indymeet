@@ -28,7 +28,7 @@ DATABASES = {
         "PASSWORD": os.environ["DB_PASSWORD"],
         "OPTIONS": {
             "client_encoding": "UTF8",
-            "sslmode": "require",
+            "sslmode": os.environ.get("DB_SSLMODE", "require"),
         },
     }
 }
