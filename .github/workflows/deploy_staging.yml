@@ -9,7 +9,6 @@ jobs:
   build:
     env:
       CR_TOKEN: ${{ secrets.CR_TOKEN }}
-      CR_ENV: staging
       CR_APP: djangonautspacetest
       # Specify dummy environment variables to avoid hard breaks.
       RANDOM_SECRET_KEY: "hunter2"
@@ -36,4 +35,4 @@ jobs:
         pip install -r requirements/requirements.txt
     - run: python manage.py tailwind install
     - run: python manage.py tailwind build
-    - run: cr deploy ${{ env.CR_APP}} --env ${{ env.CR_ENV }}
+    - run: cr deploy ${{ env.CR_APP}} --token ${{ env.CR_TOKEN }}

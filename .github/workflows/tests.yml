@@ -18,6 +18,7 @@ jobs:
       DB_HOST: "localhost"
       DB_USER: "djangonaut"
       DB_PASSWORD: "djangonaut"
+      DB_SSLMODE: "disable"
       DEBUG: False
       RANDOM_SECRET_KEY: "hunter2"
       VIRTUAL_HOST: "djangonaut.space"
