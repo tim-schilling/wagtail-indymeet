@@ -4,7 +4,7 @@
 
 {% block title %}
     {% if search_term %}
-        {{ search_term }} | {{ blog_page.title }}
+        {{ search_term }} | {% if blog_page.seo_title %}{{ blog_page.seo_title }}{% else %}{{ blog_page.title }}{% endif %}
     {% else %}
         {{ block.super }}
     {% endif %}
@@ -28,8 +28,8 @@
 
 {% block social_share %}
     {% image blog_page.header_image fill-800x450 as share_image %}
-    <meta property="og:title" content="{{ blog_page.title }}" />
-    <meta property="og:description" content="{{ blog_page.description }}" />
+    <meta property="og:title" content="{% if blog_page.seo_title %}{{ blog_page.seo_title }}{% else %}{{ blog_page.title }}{% endif %}" />
+    <meta property="og:description" content="{% if blog_page.search_description %}{{ blog_page.search_description }}{% else %}{{ blog_page.body|striptags|truncatewords:20 }}{% endif %}" />
     <meta property="og:url" content="{% canonical_url %}" />
     {% if blog_page.header_image %}
         <meta property="og:image" content="{% image_url share_image.url %}" />
@@ -38,8 +38,8 @@
         <meta name="twitter:image" content="{% image_url share_image.url %}" />
     {% endif %}
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{{ blog_page.title }}" />
-    <meta name="twitter:description" content="{{ blog_page.description }}" />
+    <meta name="twitter:title" content="{% if blog_page.seo_title %}{{ blog_page.seo_title }}{% else %}{{ blog_page.title }}{% endif %}" />
+    <meta name="twitter:description" content="{% if blog_page.search_description %}{{ blog_page.search_description }}{% else %}{{ blog_page.body|striptags|truncatewords:20 }}{% endif %}" />
 {% endblock social_share %}
 
 {% block extra_content %}

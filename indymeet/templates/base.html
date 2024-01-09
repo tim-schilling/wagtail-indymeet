@@ -7,7 +7,7 @@
         <title>
             {% block title %}
                 {% if blog_page %}
-                    {{ blog_page.title }}{% if blog_page.description %} | {{ blog_page.description }}{% endif %}
+                    {% if blog_page.seo_title %}{{ blog_page.seo_title }}{% else %}{{ blog_page.title }}{% endif %}{% if blog_page.description %} | {{ blog_page.description|truncatewords:20 }}{% endif %}
                 {% elif page %}
                     {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
                 {% else %}
@@ -49,11 +49,7 @@
         <meta name="title"
               content="{% block meta_title %}
                             {% if blog_page %}
-                              {% if blog_page.seo_title %}
-                                  {{ blog_page.seo_title }}
-                              {% else %}
-                                  {{ blog_page.title }}
-                              {% endif %}
+                              {% if blog_page.seo_title %}{{ blog_page.seo_title }}{% else %}{{ blog_page.title }}{% endif %}
                             {% else %}
                               Djangonaut Space - Where contributors launch!
                             {% endif %}
@@ -61,7 +57,7 @@
         <meta name="description"
               content="{% block meta_description %}
                             {% if blog_page %}
-                                {{ blog_page.search_description }}
+                                {% if blog_page.search_description %}{{ blog_page.search_description }}{% else %}{{ blog_page.body|striptags|truncatewords:20 }}{% endif %}
                             {% else %}
                                 Djangonaut Space is a contributor mentorship program placing an emphasis on group-learning, sustainability and longevity.
                             {% endif %}
