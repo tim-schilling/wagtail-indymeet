@@ -1,4 +1,4 @@
-name: Build and deploy prod app to codered
+name: Build and deploy staging app to codered
 
 on:
   push:
