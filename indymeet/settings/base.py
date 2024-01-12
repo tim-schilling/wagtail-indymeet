@@ -215,3 +215,32 @@ PUPUT_ENTRY_MODEL = "home.models.BlogAbstract"
 MIGRATION_MODULES = {"puput": "home.puput_migrations"}
 
 TAILWIND_APP_NAME = "theme"
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "root": {"level": "WARNING", "handlers": ["console"]},
+    "formatters": {
+        "verbose": {
+            "format": "{name} {levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {"format": "%(levelname)s %(message)s"},
+    },
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "django.request": {"handlers": [], "level": "ERROR"},
+    },
+}

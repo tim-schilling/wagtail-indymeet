@@ -34,3 +34,28 @@ DATABASES = {
 }
 
 WAGTAILADMIN_BASE_URL = f"http://{os.environ['VIRTUAL_HOST']}"
+
+# Add more logging for production.
+try:
+    # Attempt to create the file
+    with open("/var/log/django.log", "x") as file:
+        pass  # No action needed, just creating the file
+except FileExistsError:
+    # File already exists, configure the file logging.
+    LOGGING["root"] = {"level": "WARNING", "handlers": ["console", "file"]}
+    LOGGING["handlers"]["file"] = {
+        "class": "logging.handlers.TimedRotatingFileHandler",
+        "filename": "/var/log/django.log",
+        "formatter": "verbose",
+        "filters": ["require_debug_false"],
+        "when": "midnight",
+        "backupCount": 10,
+    }
+    LOGGING["loggers"]["django"] = {
+        "handlers": ["file"],
+        "level": "INFO",
+        "propagate": True,
+    }
+except PermissionError:
+    # Can't create the file so don't instrument the file logger
+    pass
